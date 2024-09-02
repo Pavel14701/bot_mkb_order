@@ -3,7 +3,6 @@ from telebot.storage import StateRedisStorage
 from telebot.states import State, StatesGroup
 from telebot.states.sync.context import StateContext
 from dotenv import load_dotenv
-from bot_instance import bot, MyStates
 load_dotenv()
 
 
