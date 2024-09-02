@@ -5,3 +5,7 @@
 [SQL: INSERT INTO "Users" (user_id, chat_id, first_name, last_name, name_company, start_time, last_update) VALUES (?, ?, ?, ?, ?, ?, ?)]
 [parameters: ('chat_id', 809464979, 'Pashtet', 'Medved', None, '2024-09-03 01:37:08.311634', '2024-09-03 01:37:08.311634')]
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
+2024-09-03 01:42:51 - ERROR - (sqlite3.OperationalError) table Users has no column named last_update
+[SQL: INSERT INTO "Users" (user_id, chat_id, first_name, last_name, name_company, start_time, last_update) VALUES (?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('chat_id', 809464979, 'Pashtet', 'Medved', None, '2024-09-03 01:42:50.431614', '2024-09-03 01:42:50.431614')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
