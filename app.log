@@ -1,0 +1,7 @@
+2024-09-03 01:30:33 - ERROR - (builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: INSERT INTO "Users" (user_id, chat_id, first_name, last_name, name_company, start_time, last_update) VALUES (?, ?, ?, ?, ?, ?, ?)]
+[parameters: [{'first_name': 'Pashtet', 'last_name': 'Medved', 'user_id': 'chat_id', 'last_update': '2024-09-03 01:30:33', 'chat_id': 809464979, 'start_time': '2024-09-03 01:30:33', 'name_company': None}]]
+2024-09-03 01:37:08 - ERROR - (sqlite3.OperationalError) table Users has no column named last_update
+[SQL: INSERT INTO "Users" (user_id, chat_id, first_name, last_name, name_company, start_time, last_update) VALUES (?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('chat_id', 809464979, 'Pashtet', 'Medved', None, '2024-09-03 01:37:08.311634', '2024-09-03 01:37:08.311634')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
