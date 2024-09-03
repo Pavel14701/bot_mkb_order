@@ -1,7 +1,8 @@
 import contextlib, logging
 from typing import Optional
-from bot_instance import cache_storage, bot
 from telebot.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
+from bot_instance import cache_storage, bot
+
 
 def update_msg_to_del(chat_id:int, user_id:int, msg: Message):
     data = {'msg_del':{'chat_id':msg.chat.id, 'message_id': msg.message_id}}
@@ -26,7 +27,7 @@ def quiq_inline_keyboard(**kwargs):
 logger = logging.getLogger('my_logger')
 logger.setLevel(logging.ERROR)
 
-handler = logging.FileHandler('app.log')
+handler = logging.FileHandler('database.log')
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 handler.setFormatter(formatter)
 

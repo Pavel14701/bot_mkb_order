@@ -1,10 +1,10 @@
+from datetime import datetime
 from telebot import custom_filters
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery, Message
 from telebot.states.sync.context import StateContext
 from bot_instance import bot, MyStates, cache_storage
 from datasets.db_comands import DbComands
 from utils import del_msg, quiq_inline_keyboard, update_msg_to_del
-from datetime import datetime
 
 
 
@@ -63,7 +63,7 @@ def ask_status_company(message:Message):
     inline_markup = quiq_inline_keyboard(company_ooo='ООО', company_ip='ИП', back_to_main='Назад')
     msg = bot.send_message(chat_id, text='У вас ип или ООО ?', reply_markup=inline_markup)
     update_msg_to_del(chat_id, user_id, msg)
-    
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callback(call: CallbackQuery):
@@ -74,7 +74,7 @@ def handle_callback(call: CallbackQuery):
         state = StateContext(call, bot)
         first(chat_id, user_id, state)
     elif data == 'back_to_main':
-        start_ex(call)
+        start(chat_id, user_id)
 
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))
@@ -82,6 +82,7 @@ bot.add_custom_filter(custom_filters.IsDigitFilter())
 bot.add_custom_filter(custom_filters.TextMatchFilter())
 from telebot.states.sync.middleware import StateMiddleware
 bot.setup_middleware(StateMiddleware(bot))
+
 
 if __name__ == '__main__':
     bot.infinity_polling()

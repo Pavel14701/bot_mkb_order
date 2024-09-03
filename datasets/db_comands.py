@@ -3,12 +3,16 @@ from datasets.database import create_tables, User, SurveyResults
 from utils import logger
 import logging
 
+
 Session = create_tables()
+
+
 class DbComands:
     def __init__(self, Session:sessionmaker=Session, logger:logging=logger, create_logs:bool=True):
         self.Session = Session
         self.logger = logger
         self.logs = create_logs
+
 
     def add_user_to_base(self, user_data:dict) -> None:
         # sourcery skip: class-extract-method
