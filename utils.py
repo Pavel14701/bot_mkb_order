@@ -4,15 +4,16 @@ from bot_instance import cache_storage, bot
 from telebot.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
 def update_msg_to_del(chat_id:int, user_id:int, msg: Message):
-    cache_storage.add_data(chat_id, user_id, data={'msg_del': {'chat_id':msg.chat.id, 'message_id': msg.message_id}})
+    data = {'msg_del':{'chat_id':msg.chat.id, 'message_id': msg.message_id}}
+    cache_storage.add_data(chat_id, user_id, data=data)
 
 
 def del_msg(chat_id:int, user_id:int, return_state_data:bool=False) -> Optional[dict]:
-    state_data = cache_storage.get_data(chat_id, user_id)
+    msg = cache_storage.get_data(chat_id, user_id)
     with contextlib.suppress():
-        bot.delete_message(int(state_data['msg_del']['chat_id']), state_data['msg_del']['message_id'])
+        bot.delete_message(int(msg['msg_del']['chat_id']), msg['msg_del']['message_id'])
     if return_state_data:
-        return state_data
+        return msg
 
 
 def quiq_inline_keyboard(**kwargs):

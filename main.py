@@ -14,8 +14,8 @@ db = DbComands()
 @bot.message_handler(commands=["start"])
 def start_ex(message: Message|CallbackQuery):
     user_data = {
-        'chat_id': message.chat.id,
-        'user_id': 'chat_id' if message.from_user.id == message.chat.id else message.from_user.id,
+        'chat_id': 'user_id' if message.chat.id == message.from_user.id else message.chat.id,
+        'user_id': message.from_user.id,
         'timestamp': datetime.now(),
         'first_name': message.from_user.first_name,
         'last_name': message.from_user.last_name
@@ -23,13 +23,13 @@ def start_ex(message: Message|CallbackQuery):
     inline_markup = quiq_inline_keyboard(first='hz1', second='hz2', third='hz3')
     with open('./images/first.jpg', 'rb') as photo:
         msg = bot.send_photo(
-            user_data['chat_id'],
+            message.chat.id,
             photo,
             caption =f'приветствие для {user_data['first_name']} {user_data['last_name']}',
             reply_to_message_id=message.message_id,
             reply_markup=inline_markup
         )
-    update_msg_to_del(user_data['chat_id'], user_data['user_id'], msg)
+    update_msg_to_del(message.chat.id, message.from_user.id, msg)
     cache_storage.add_data(user_data['chat_id'], user_data['user_id'], data={'name':{'first_name': user_data['first_name'], 'last_name': user_data['last_name']}})
     db.add_user_to_base(user_data)
 
@@ -76,4 +76,12 @@ def handle_callback(call: CallbackQuery):
     elif data == 'back_to_main':
         start_ex(call)
 
-bot.polling()
+
+bot.add_custom_filter(custom_filters.StateFilter(bot))
+bot.add_custom_filter(custom_filters.IsDigitFilter())
+bot.add_custom_filter(custom_filters.TextMatchFilter())
+from telebot.states.sync.middleware import StateMiddleware
+bot.setup_middleware(StateMiddleware(bot))
+
+if __name__ == '__main__':
+    bot.infinity_polling()
