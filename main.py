@@ -4,7 +4,7 @@ from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQu
 from telebot.states.sync.context import StateContext
 from bot_instance import bot, MyStates, cache_storage
 from datasets.db_comands import db
-from utils import del_msg, quiq_inline_keyboard, update_msg_to_del
+from utils import del_msg, quiq_inline_keyboard, update_msg_to_del, logger
 
 
 @bot.message_handler(commands=["start"])
@@ -21,7 +21,8 @@ def start_ex(message: Message|CallbackQuery):
         msg = bot.send_photo(
             message.chat.id,
             photo,
-            caption =f'приветствие для {user_data['first_name']} {user_data['last_name']}',
+            caption =f'приветствие для {user_data['first_name']} {user_data['last_name']}\n\
+                ',
             reply_to_message_id=message.message_id,
             reply_markup=inline_markup
         )
@@ -72,8 +73,8 @@ def handle_callback(call: CallbackQuery):
         case 'back_to_main':
             start(chat_id, user_id)
         case _:
-            # Обработка других случаев, если необходимо
-            pass
+            logger.warning(f"Unhandled callback query data: {call.data}")
+            print(f'\n\nWarning !!!\nUnhandled callback query data: {call.data}\n\n')
 
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))

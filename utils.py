@@ -25,10 +25,11 @@ def quiq_inline_keyboard(**kwargs):
         inline_markup.add(button)
     return inline_markup
 
+
 def create_logger():
     logger = logging.getLogger('my_logger')
     logger.setLevel(logging.ERROR)
-    handler = logging.FileHandler('logs.log')
+    handler = logging.FileHandler('mkb_order_bot.log')
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
