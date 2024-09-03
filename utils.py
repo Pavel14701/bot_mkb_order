@@ -5,14 +5,15 @@ from bot_instance import cache_storage, bot
 
 
 def update_msg_to_del(chat_id:int, user_id:int, msg: Message):
-    data = {'msg_del':{'chat_id':msg.chat.id, 'message_id': msg.message_id}}
-    cache_storage.add_data(chat_id, user_id, data=data)
+    key = 'msg_del'
+    value = {'chat_id':msg.chat.id, 'message_id': msg.message_id}
+    cache_storage.add_data(chat_id, user_id, key, value)
 
 
 def del_msg(chat_id:int, user_id:int, return_state_data:bool=False) -> Optional[dict]:
-    msg = cache_storage.get_data(chat_id, user_id)
+    msg = cache_storage.get_data(chat_id, user_id).get('msg_del')
     with contextlib.suppress():
-        bot.delete_message(int(msg['msg_del']['chat_id']), msg['msg_del']['message_id'])
+        bot.delete_message(int(msg['chat_id']), msg['message_id'])
     if return_state_data:
         return msg
 
@@ -24,11 +25,13 @@ def quiq_inline_keyboard(**kwargs):
         inline_markup.add(button)
     return inline_markup
 
-logger = logging.getLogger('my_logger')
-logger.setLevel(logging.ERROR)
+def create_logger():
+    logger = logging.getLogger('my_logger')
+    logger.setLevel(logging.ERROR)
+    handler = logging.FileHandler('logs.log')
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
 
-handler = logging.FileHandler('database.log')
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-handler.setFormatter(formatter)
-
-logger.addHandler(handler)
+logger = create_logger()

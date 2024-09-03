@@ -51,3 +51,6 @@ class DbComands:
                     self.logger.error(e)
                 print(e)
                 session.rollback()
+
+
+db = DbComands()

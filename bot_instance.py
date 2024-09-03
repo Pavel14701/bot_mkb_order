@@ -1,20 +1,18 @@
 import os, json, telebot, redis
 from redis.connection import ConnectionPool
-from typing import Any
+from typing import Any, Optional
 from telebot.storage import StateRedisStorage
 from telebot.states import State, StatesGroup
-from telebot.states.sync.context import StateContext
 from dotenv import load_dotenv
+
+
 load_dotenv()
-
-
-state_storage = StateRedisStorage(host=os.getenv('host'), port=6379, db=2)
+state_storage = StateRedisStorage(host=os.getenv('REDIS_HOST'), port=int(os.getenv('REDIS_PORT')), db=int(os.getenv('REDIS_DB')))
 bot = telebot.TeleBot(os.getenv('TOKEN'), state_storage=state_storage, num_threads=20, use_class_middlewares=True, colorful_logs=True)
 
 
 class MyStates(StatesGroup):
     name_company = State()
-
 
 
 class RedisCache:
@@ -28,7 +26,8 @@ class RedisCache:
         return redis.Redis(connection_pool=self.pool)
 
 
-    def add_data(self, user_id:int, chat_id:int, data:Any) -> None:
+    def add_data(self, user_id:int, chat_id:int, key:Optional[str]=None, value:Any=None) -> None:
+        data = {f'{key}': value} if key else value
         conn = self.__worker()
         with conn as cache:
             key = f'{self.bot_id}_{user_id}_{chat_id}'
@@ -48,5 +47,6 @@ class RedisCache:
         with conn as cache:
             key = f'{self.bot_id}_{user_id}_{chat_id}'
             cache.delete(key)
+
 
 cache_storage = RedisCache()

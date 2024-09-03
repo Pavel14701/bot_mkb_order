@@ -3,12 +3,8 @@ from telebot import custom_filters
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery, Message
 from telebot.states.sync.context import StateContext
 from bot_instance import bot, MyStates, cache_storage
-from datasets.db_comands import DbComands
+from datasets.db_comands import db
 from utils import del_msg, quiq_inline_keyboard, update_msg_to_del
-
-
-
-db = DbComands()
 
 
 @bot.message_handler(commands=["start"])
@@ -69,12 +65,15 @@ def ask_status_company(message:Message):
 def handle_callback(call: CallbackQuery):
     chat_id = call.message.chat.id
     user_id = call.from_user.id
-    data = call.data
-    if data == 'first':
-        state = StateContext(call, bot)
-        first(chat_id, user_id, state)
-    elif data == 'back_to_main':
-        start(chat_id, user_id)
+    match call.data:
+        case 'first':
+            state = StateContext(call, bot)
+            first(chat_id, user_id, state)
+        case 'back_to_main':
+            start(chat_id, user_id)
+        case _:
+            # Обработка других случаев, если необходимо
+            pass
 
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))
